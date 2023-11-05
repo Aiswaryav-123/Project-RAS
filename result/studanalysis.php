@@ -15,13 +15,32 @@ function calculateGrade($GP) {
     }
 } ?>
 <style>
-    body {
-        background: #b9d0fa ;
+  
+    body{
+     background: #EAF4FC;
     }
+
     #percentageChart {
-    width: 200px; 
-    height: 100px; 
-}
+        width: 200px; 
+        height: 100px; 
+    }
+    #filterform2 {
+        position: relative;
+        width:auto;
+        z-index: 1;
+        
+        background-color: #FFFFFF;
+        margin: 100px 300px 100px 300px;
+        padding: 10px;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        
+        display: flex;
+        flex-direction: column;
+        height:auto;
+    }
+    #t{
+        
+    }
 </style>
 
 <?php
@@ -98,8 +117,8 @@ if (isset($_SESSION['username']))
         <input type="checkbox" name="graph" <?php if (isset($_POST['graph']) && $_POST['graph'] == "on") echo "checked"; else echo "unchecked"; ?> />
         </td>
     </tr> 
-    </table>  
-        <button type="submit" value="Log In" name="submit">SEARCH</button><br/>
+    </table>  <br>
+        <button class="upload-button1" type="submit" value="Log In" name="submit">SEARCH</button><br/>
             </div>
 <?php
 if (isset($_POST['submit']))
@@ -115,7 +134,7 @@ if (isset($_POST['submit']))
         {         
             $name = $a['name'];
             $stud_id =$a['stud_id'];             
-            echo '<table align="center"><tr><th>Name</th><th>:</th><th>'.strtoupper($name).'<td></tr>';  
+            echo '<table id=printTable align="center"><tr><th>Name</th><th>:</th><th>'.strtoupper($name).'<td></tr>';  
             echo '<tr><th>Reg No.</th><th>:</th><th>'.$name_reg.'<td></table><br><br>'; 
            
             $query = "SELECT pgm_id FROM stud_master WHERE uty_reg_no = '" . $name_reg . "'";
@@ -140,15 +159,14 @@ if (isset($_POST['submit']))
         {         
             $uty = $a['uty_reg_no'];
             $stud_id =$a['stud_id'];   
-            echo '<table align="center"><tr><th>Name</th><th>:</th><th>'.strtoupper($name_reg).'<td>';
+            echo '<table id=printTable align="center"><tr><th>Name</th><th>:</th><th>'.strtoupper($name_reg).'<td>';
             echo '<tr><th>Reg No.</th><th>:</th><th>'.$uty.'<td></tr></table><br><br>'; 
 
             $query2 = "SELECT course_id FROM pgm_course WHERE pgm_id = " . $pgm_id;
             $course_ids = mysqli_query($dbc, $query2);
              
         }
-    }
-  
+    } 
     $selected_semesters = isset($_POST['sem']) ? $_POST['sem'] : array();
     $semester_filter = implode(',', $selected_semesters);?>
 
@@ -163,17 +181,70 @@ if (isset($_POST['submit']))
         {
             $l_id = $a['language_id'];
         }
-       
-
         $query = "SELECT dept_id FROM common_course_type WHERE common_course_type_id=" . $l_id;
         $d_ids = mysqli_query($dbc, $query);
         foreach ($d_ids as $a) 
         {
             $d_id = $a['dept_id'];
         }
+        
         foreach ($selected_semesters as $semester) 
         {
-            echo '<table align=center id=csv border="solid" >';?>
+            $i=0;
+            foreach($course_ids as $a)
+            {
+                if($i==0)
+                {
+                    $course_id = $a['course_id'];
+                    $query = "SELECT course_title,course_id,course_type_id FROM course 
+                              WHERE course_id = " . $course_id . "   AND semester =".$semester." AND 
+                              credits <> " . $credit . " AND  syllabus_intro_year IN (" . $year . ", " . $year2 . ")";
+                    $courses = mysqli_query($dbc, $query);
+                    $stud_ids2 = [];
+                    foreach ($courses as $a)
+                    {
+                        $course_id2 = $a['course_id'];
+                        $course_type_id = $a['course_type_id'];
+                        $query = "SELECT stud_id FROM sem_exam WHERE course_id = ".$course_id2;
+                        $stud_ids = mysqli_query($dbc, $query);
+                        foreach($stud_ids as $a)
+                        {
+                            $stud_id2 = $a['stud_id'];
+                            $stud_ids2[] = $stud_id2;
+                        }
+                        if(!in_array($stud_id,$stud_ids2) && $course_type_id!=4)
+                        {
+                            if(in_array($semester,$selected_semesters )) 
+                            {
+                                    $index = array_search($semester,$selected_semesters );
+                                    unset($selected_semesters[$index ]);
+                                    $i=1;
+                                    echo '
+                                    <table align="center" style="color:red;">
+                                        <tr>
+                                            <th>Sorry, semester '.$semester.' results have not been uploaded.</th>
+                                        </tr>
+                                    </table>';
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        $tables = [];
+        $tables[]="printTable"; 
+        $k=-1;
+        foreach ($selected_semesters as $semester) 
+        {
+            $k=$k+1;
+            echo '<table align=center style="width:50%;" class="custom-table" id=printTable'.$k.' style="width: 50%;" >';
+            $tables[]="printTable$k";
+            ?>
+
             <tr><th colspan="6">SEMESTER <?php echo $semester?>
             <tr><th>Papers</th>
                 <th>CE</th>
@@ -189,15 +260,16 @@ if (isset($_POST['submit']))
             foreach ($course_ids as $a) 
             {
                 $course_id = $a['course_id'];
-                $query = "SELECT course_title, course_type_id, dept_id, total_internal,total_external,credits FROM course
+                $query = "SELECT course_title,course_id,course_type_id, dept_id, total_internal,total_external,credits FROM course
                             WHERE course_id = " . $course_id . "  AND semester =".$semester."
                             AND credits <> " . $credit . " AND  syllabus_intro_year
                             IN (" . $year . ", " . $year2 . ")";
                 
                 $courses = mysqli_query($dbc, $query);
-          
+                
                 foreach ($courses as $a)
                 {
+                    $course_id2 = $a['course_id'];
                     $i=0;
                     $p="P";
                     $f="F";
@@ -224,8 +296,11 @@ if (isset($_POST['submit']))
                     else 
                     {
                         $course_title = $a['course_title'];
-                    }?>
-                    <tr><th> <?php echo $course_title; '<br>'; ?> </th>
+                    }
+
+                    ?>
+
+                    <tr><td><b><?php echo $course_title; '<br>'; ?><b> </td>
                     <?php
                         $query3 = "SELECT ce,ese FROM sem_exam WHERE stud_id = " . $stud_id . " AND course_id = " . $course_id;
                                 $marks = mysqli_query($dbc, $query3);
@@ -327,7 +402,7 @@ if (isset($_POST['submit']))
                 }
             }
             ?>
-                </tr><tr><th colspan="1">Percentage</th>
+                </tr><tr><td colspan="1"><b>Percentage<b></td>
                 <?php  
                     $SGPA= $TotalCreditPoint/ $totalCredit;
                     $percentage = $SGPA *10;
@@ -338,6 +413,7 @@ if (isset($_POST['submit']))
                     echo '</table>';
                     echo '<br>'; 
         }
+        
             if($overallresult=="on")
             {
                 $i=true;
@@ -361,9 +437,9 @@ if (isset($_POST['submit']))
                 if($i==true)
                 {
                 ?>
-                    <table>
+                    <table align="center" style="color:red;">
                         <tr>
-                            <td>Marks in all semester are not uploaded yet</td>
+                            <th>The marks for all semesters have not been uploaded yet.</th>
                         </tr>
                     </table>
                 <?php
@@ -565,10 +641,12 @@ if (isset($_POST['submit']))
                         $totalcp=($complimentary_elective_1_CP+$core_course_CP+$complimentary_elective_2_CP+ $common_course_1_CP+ $common_course_2_CP+$opencourseCP)/$totalcredit;
                         
                     }
-
-                    echo "<center><b>TOTAL RESULT<b><center><br>";
-                    echo '<table align=center id=csv border="solid">
-                        <tr>
+                    $k=$k+1;
+                    echo '<br><br>';
+                    echo '<table align=center style="width:70%;" class="custom-table" id=printTable'.$k.' border= "3px solid " style="width: 60%;" >';
+                    $tables[]="printTable$k";
+                    echo '<tr><th colspan="6" >TOTAL RESULT</th></tr>';
+                    echo '   <tr>
                             <th colspan="2">Course</th>
                             <th>Credit</th>
                             <th>OGPA</th>
@@ -576,8 +654,8 @@ if (isset($_POST['submit']))
                             <th>Percentage</th>
                         </tr>
                         <tr>
-                            <th>Common Course-I</th>
-                            <th>English</th>
+                            <td><b>Common Course-I<b></td>
+                            <td><b>English<b></td>
                             <td>'.$common_course_credit_1.'</td>
                             <td>'.number_format($common_course_1_OGPA, 3).'</td>
                             <td>'.calculateGrade($common_course_1_OGPA).'</td>
@@ -585,8 +663,8 @@ if (isset($_POST['submit']))
                         </tr>
                     
                         <tr>
-                            <th>Common Course-II</th>
-                            <th>'.$common_course_2.'</th>
+                            <td><b>Common Course-II<b></td>
+                            <td><b>'.$common_course_2.'<b></td>
                             <td>'.$common_course_credit_2.'</td>
 
                             <td>'.number_format($common_course_2_OGPA, 3).'</td>
@@ -595,8 +673,8 @@ if (isset($_POST['submit']))
                            
                         </tr>
                         <tr>
-                            <th>Core Course </th>
-                            <th>'.$dept_name.'</th>
+                            <td><b>Core Course <b></td>
+                            <td><b>'.$dept_name.'<b></td>
                             <td>'.$core_course_credit.'</td>
                            
                             <td>'.number_format($core_course_OGPA,3).'</td>
@@ -605,8 +683,8 @@ if (isset($_POST['submit']))
                             
                         </tr>
                         <tr>
-                            <th>Complementary Elective Course - I</th>
-                            <th>'.$complimentary[0].'</th>
+                            <td><b>Complementary Elective Course - I<b></td>
+                            <td><b>'.$complimentary[0].'<b></td>
                             <td>'.$complimentary_elective_credit_1.'</td>
                            
                             <td>'.number_format($complimentary_elective__1_OGPA,3).'</td>
@@ -614,8 +692,8 @@ if (isset($_POST['submit']))
                             <td>'.number_format($complimentary_elective__1_OGPA * 10,2).'</td>
                         </tr>
                         <tr>
-                            <th>Complementary Elective Course-II</th>
-                            <th>'.$complimentary[1].'</th>
+                            <td><b>Complementary Elective Course-II<b></td>
+                            <td><b>'.$complimentary[1].'<b></td>
                             <td>'.$complimentary_elective_credit_2.'</td>
                             
                             <td>'.number_format($complimentary_elective__2_OGPA,3).'</td>
@@ -623,14 +701,14 @@ if (isset($_POST['submit']))
                             <td>'.number_format($complimentary_elective__2_OGPA * 10,2).'</td>
                         </tr>
                         <tr>
-                            <th>Generic Elective Course</th>
+                            <td><b>Generic Elective Course<b></td>
                             <td> </td>
                             <td>2</td>
                             <td>'.number_format($opencourseOGPA,3).'</td>
                             <td>'.calculateGrade($opencourseOGPA).'</td>
                             <td>'.number_format($opencourseOGPA * 10,2).'</td>
                         </tr>
-                        <tr><th colspan="2">Total for Programme</th>
+                        <tr><td colspan="2"><b>Total for Programme<b></td>
                         
                         <td><b>'.$totalcredit.'<b></td>
                        <td><b>'.number_format($totalcp,3).'<b></td>
@@ -640,20 +718,28 @@ if (isset($_POST['submit']))
 
                     </table>';
                 }
+                
             }
-           
-
+        ?>
+            <div align=center>
+                <br>
+                <button class="upload-button1" onclick=print()>Print</button>
+            </div>
+        <?php   
+            
 
 
             if($graph=="on") 
             {   
             ?>
+            <div id="filterform2">
                 <canvas id="percentageChart" style="width: 200px; height: 100px;"></canvas>
+            </div>
             <?php
             }
-}           
+}  
+       
 ?>
-
 
 <script>
 
@@ -662,7 +748,8 @@ var semesters = <?php echo json_encode($all_sem); ?>;
 
 var ctx = document.getElementById('percentageChart').getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'bar', 
+    type: 'bar',
+    
     data: {
         labels: semesters,
         datasets: [{
@@ -700,5 +787,22 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
 </script>
+
+<script>
+// scritp for printing
+var tables = <?php echo json_encode($tables); ?>;
+
+function print() {
+    var newWin = window.open("");
+    tables.forEach(function (tableId) {
+        var tableToPrint = document.getElementById(tableId);
+        newWin.document.write(tableToPrint.outerHTML);
+        newWin.document.write("<br><br>"); 
+    });
+    
+    newWin.print();
+    newWin.close();
+}
+</script>
+

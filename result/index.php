@@ -1,7 +1,32 @@
 <style>
-    body{
-    background: #B9D0FA;
-  }
+    body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background:#EAF4FC;
+}
+
+.split-background {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(140deg,#0E3657 20%, #EAF4FC 20%, #EAF4FC 80%,#0E3657 80%);
+}
+    .upload-button2 {
+        height:30px;
+        display: block; 
+        margin: 0 auto;
+        border:solid;
+        padding: 10px 10px 5px 10px;
+        background-color: #0E3657;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+
+    }
 </style>
 <?php
   require_once('appvars.php');
@@ -26,36 +51,22 @@
     }
   	if($_SESSION['role_id'] == 1)
   	{ ?>
-    
-  		
-         
-      <div class="filterform" align="center">
-            <?php require_once('navmenu.php'); ?>
-              <div class="cont">
-                  <div class="b">
-                  
-                  <br /><br/><a href="addstudent.php" class="upload-button">Add Student Profile</a><br /><br />
-                  <a href="filterstudent.php" class="upload-button">View/Edit Student Profile</a><br /><br />
-                  <a href="addteacher.php" class="upload-button">Add Teacher</a><br /><br />
-                  <a href="res_analysis.php"  class="upload-button">Result Analysis</a><br /><br />
-                  <a href="addcourse.php" class="upload-button">Add Course</a><br /><br />
-                    
-                        
-                  </div>
-  	
-  		
-  		</div>
-     </div>
+    <div class="split-background">
+        <?php require_once('navmenu.php'); ?>
+        <br><br></br>
+        <a href="addteacher.php" class="upload-button">ADD TEACHER</a><br /><br>
+        <a href="addcourse.php" class="upload-button">ADD COURSE</a><br /><br>
+        <a href="filterstudent.php"  class="upload-button">VIEW STUDENTS</a><br /><br>
+        <a href="res_analysis.php"  class="upload-button">RESULT ANALYSIS</a><br />
+
+    </div>
   	<?php }
-      else if($_SESSION['role_id'] == 2)
+    else if($_SESSION['role_id'] == 2)
   	{
         $username = $_SESSION['username'];
         $user_id = $_SESSION['user_id'];
-		 
-
-        //query have to change using join
-		  $query = "SELECT teacher_id FROM staff_login
-		            WHERE username = '".mysqli_real_escape_string($dbc, $username)."'";
+		    $query = "SELECT teacher_id FROM staff_login
+		              WHERE username = '".mysqli_real_escape_string($dbc, $username)."'";
               $teacher_ids=mysqli_query($dbc,$query);
               foreach($teacher_ids as $a)
               {
@@ -77,10 +88,10 @@
               {
                 ?>
           
-                <div class="filterform" align="center">
+          <div class="split-background">
                   <?php require_once('navmenu.php'); ?>
-                  <div class="cont">
-                    <div class="b">
+
+                   
                       <!--<img src="/result/images/dwnld.png" width="600" height="200">-->
                       <?php foreach($dept_names as $dept_name)
                       {
@@ -95,22 +106,28 @@
                             if($no_of_sem==6 || $no_of_sem==10)
                             {
                         ?>     
-                               
-                              <br><br> <br><br><br><br><br><br>
+                        
+                               <center>
+                              <br><br> <br><br>
                               <a href="/result/semexamsel.php?pgm_id=<?php echo $dept_name['pgm_id']; ?>"class="upload-button">
                                 RESULT UPLOAD
-                              </a><br/>
+                              </a><br/><br/>
                           
                               <a href="/result/semexamsel2.php?pgm_id=<?php echo $dept_name['pgm_id']; ?>"class="upload-button">
                               RESULT VIEW/EDIT
-                              </a><br/>
+                              </a><br/><br/>
 
                               <a href="/result/res_analysis.php" class="upload-button">
                               RESULT ANALYSIS
                               </a><br/><br/>
+
+                              <a href="filterstudent.php"  class="upload-button">VIEW STUDENTS</a><br /><br />
+                              <center>
+                        </div>
+                              
                     </div>
                   </div>
-                </div>
+               
               
                 <?php 
                             }
@@ -134,36 +151,19 @@
                     FROM   stud_master WHERE current_sem > 0 order by current_sem";
           $sems = mysqli_query($dbc, $query);
           ?>
+<div class="split-background">
+<?php require_once('navmenu.php'); ?>    
+      
 
-             
-      <div class="filterform" align="center">
-            <?php require_once('navmenu.php'); ?>
-              <div class="cont">
-                  <div class="b">
-                  
-                 
-                  <br><br> <br><br><br><br><br><br><a href="res_analysis.php"  class="upload-button">RESULT ANALYSIS</a>
-                  <br /><a href="filterstudent.php"  class="upload-button">VIEW STUDENTS</a><br /><br />
-                  
-                        
-                  </div>
-  	
-  		
-  		</div>
-     </div>
-                   
-                 
-          
+          <br><br> <br><br><br><br><br><br><a href="res_analysis.php"  class="upload-button">RESULT ANALYSIS</a>
+          <br /><a href="filterstudent.php"  class="upload-button">VIEW STUDENTS</a><br /><br />
+    </div>
   	<?php
-
       }
-  	
   }
   else
   {
-
         $startup_url = 'http://' . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']). '/login.php?.SID';
         header('Location: ' . $startup_url);
-
   }
 ?>

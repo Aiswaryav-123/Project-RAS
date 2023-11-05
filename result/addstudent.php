@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');

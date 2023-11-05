@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -34,14 +34,14 @@
         }
                
 ?>
+    <?php require_once('navmenu.php'); ?>
     <div class="filterform" align=center>
-        <?php require_once('navmenu.php'); ?>
-        <div class="cont">
-                <div class="b">
-                  <br /><br/></br><br /><br/></br><br /><br/><b>Mark Editted Successfully</b>
+        <br><br><br>
+        <img src="/result/images/tick2.jpeg" style="width: 5%; padding-top: 5px;">    
+            <br /><br/><b><h2>Mark Edited Successfully<h2></b>
             <br />
             <br />
-        <?php
+            <?php
         $query = "SELECT pgm_id FROM stud_master WHERE stud_id=".$stud_id;
         $pgm_ids = mysqli_query($dbc, $query);
         foreach($pgm_ids as $a)
@@ -54,13 +54,12 @@
         {
            $stud_id = $a['stud_id'];
         }
-        echo '<td><a href="resultedit.php?stud_id='.$stud_id.'&pgm_id='.$pgm_id.'&sem='.$semester.'&roll_no='.$roll_no.'&year_of_admn='.$year_of_admn.'"class="upload-button">Next</a>';
-    
+        echo '<td><a href="resultedit.php?stud_id='.$stud_id.'&pgm_id='.$pgm_id.'&sem='.$semester.'&roll_no='.$roll_no.'&year_of_admn='.$year_of_admn.'" class="upload-button">Next</a>';
         ?>
         </div>
     </div>
     </div>
-    
+
 <?php
     }    
 ?>

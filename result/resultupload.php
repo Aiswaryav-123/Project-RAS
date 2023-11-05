@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
 require_once('appvars.php');
 require_once('connectvars.php');
@@ -55,9 +55,7 @@ if (isset($_SESSION['username']))
         foreach ($_POST['ce'] as $course_id => $ce_value) 
         {
             $ese_value = $_POST['ese'][$course_id];
-          
             $query = "INSERT INTO sem_exam (course_id,stud_id,ce, ese) VALUES ('$course_id','$stud_id','$ce_value', '$ese_value')";
-           
             mysqli_query($dbc, $query);
         }
        
@@ -69,15 +67,10 @@ if (isset($_SESSION['username']))
 }
 
 ?>
-
-
-
 <br>
 <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
-
-<div class="filterform">
-    <?php require_once('navmenu.php'); ?>
-    
+<?php require_once('navmenu.php'); ?>
+        <br>
         <input type="hidden" name="stud_id" value="<?php echo $stud_id; ?>">
         <input type="hidden" name="semester" value="<?php echo $semester; ?>">
         <input type="hidden" name="roll_no" value="<?php echo $roll_no; ?>">
@@ -100,11 +93,11 @@ if (isset($_SESSION['username']))
                 <td class=leftalign><?php echo $semester; ?></td>
             </tr>
         </table>
-
+        <br><br>
         <?php
         if (isset($_SESSION['username']) && $_SESSION['role_id'] == 2) {
         ?>
-            <table align="center">
+            <table style="width:50%;" class="custom-table" align="center">
                 <tr>
                     <th>Sl.no</th>
                     <th>Programmes</th>
@@ -137,60 +130,79 @@ if (isset($_SESSION['username']))
 
                 foreach ($course_ids as $a) {
                     $course_id = $a['course_id'];
-                    $query = "SELECT course_title, course_type_id, dept_id, total_internal,total_external FROM course
+                    $query = "SELECT course_title,course_id,course_type_id, dept_id, total_internal,total_external FROM course
                               WHERE course_id = " . $course_id . "  AND semester = " . $semester . " 
                               AND credits <> " . $credit . " AND  syllabus_intro_year
                               IN (" . $year . ", " . $year2 . ")";
                     
                     $courses = mysqli_query($dbc, $query);
-                    
-                    foreach ($courses as $a) {
-                        $course_type_id = $a['course_type_id'];
-                        $dept_id = $a['dept_id'];
-                        $total_internal =$a['total_internal'];
-                        $total_external =$a['total_external'];
-                        if ($course_type_id == 4 && $dept_id != 2) {
-                            if ($dept_id == $d_id) {
-                                $course_title = $a['course_title'];
-                            } else {
-                                continue;
-                            }
-                        }
-                         else {
-                            $course_title = $a['course_title'];
-                        }
-                        ?>
-                        <tr align="center">
-                            <td> <?php echo $i; ?> </td>
-                            <td> <?php echo $course_title; '<br>'; ?> </td>
-                           
-                          <td>  <input type="text" class="nav-input" style="width: 40px; text-align: center;"
-                                        name="ce[<?php echo $course_id; ?>]" required
-                                        max="<?php echo $total_internal; ?>" oninput="checkCeInput(this, <?php echo $total_internal; ?>)">
-                                <span class="error-message"></span></td>
-
-                            <td> <input type="text" class="nav-input" style="width: 40px; text-align: center;" 
-                            name="ese[<?php echo $course_id; ?>]" required
-                            max="<?php echo $total_external; ?>" oninput="checkCeInput(this, <?php echo $total_external; ?>)">
-                                <span class="error-message" ></span></td>
+                        foreach ($courses as $a) 
+                        {
                             
-                        </tr>
-                       
-                <?php
-                        $i++;
-                    }
+                            $course_id2 = $a['course_id'];
+                            $course_type_id = $a['course_type_id'];
+                            $dept_id = $a['dept_id'];
+                            $total_internal =$a['total_internal'];
+                            $total_external =$a['total_external'];
+                            if ($course_type_id == 4 && $dept_id != 2) 
+                            {
+                                if ($dept_id == $d_id) 
+                                {
+                                    $course_title = $a['course_title'];
+                                } else 
+                                {
+                                    continue;
+                                }
+                            }
+                            else 
+                            {
+                                $course_title = $a['course_title'];
+                            }
+                            #code for checking marks are already uploaded or not
+                            $query = "SELECT stud_id FROM sem_exam WHERE course_id = ".$course_id2;
+                            $stud_ids = mysqli_query($dbc, $query);
+                            foreach($stud_ids as $a)
+                            {
+                                $stud_id2 = $a['stud_id'];
+                                if($stud_id2 == $stud_id)
+                                {
+                                    $success_url2 = 'http://' . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']) . '/alreadyuploaded.php?'.'stud_id='.$stud_id.'&sem='.$semester;
+                                    header('Location: ' . $success_url2); 
+                                    exit();
+                                }
+                                else
+                                {   
+                                    continue;
+                                }
+                            }
+
+                            ?>
+                            <tr align="center">
+                                <td> <?php echo $i; ?> </td>
+                                <td> <?php echo $course_title; '<br>'; ?> </td>
+                            
+                            <td>  <input type="text" class="nav-input" style="width: 40px; text-align: center;"
+                                            name="ce[<?php echo $course_id; ?>]" required
+                                            max="<?php echo $total_internal; ?>" oninput="checkCeInput(this, <?php echo $total_internal; ?>)">
+                                    <span class="error-message"></span></td>
+
+                                <td> <input type="text" class="nav-input" style="width: 40px; text-align: center;" 
+                                name="ese[<?php echo $course_id; ?>]" required
+                                max="<?php echo $total_external; ?>" oninput="checkCeInput(this, <?php echo $total_external; ?>)">
+                                    <span class="error-message" ></span></td>
+                                
+                            </tr>
+                        
+                        <?php
+                            $i++;
+                        }
                     }
                 }
                 ?>
                 
             </table>
             <br>
-            
-        
-            <button class="upload-button1" type="submit" value="Submit" name="submit" >SUBMIT</button>
-            
-        </div>
-        
+            <button class="upload-button1" type="submit" value="Submit" name="submit">SUBMIT</button>
 <script>
 
 var inputs = document.querySelectorAll('.nav-input');

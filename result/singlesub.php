@@ -1,10 +1,23 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
+    }
+    #filterform2 {
+        position: relative;
+        width:500px;
+        z-index: 1;
+        align:center;
+        text-align:center;
+        background-color: #FFFFFF;
+        margin:0 auto;
+        padding: 1% 1% 1% 15%;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);     
+        display: flex;
+        flex-direction: column;
+        height:50%;
     }
 </style>
 <?php
-
 require_once('appvars.php');
 require_once('connectvars.php');
 session_start();
@@ -13,11 +26,11 @@ require_once('header.php');
 $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 if (isset($_SESSION['username']))
-    {
-        
-          $query = "SELECT pgm_id,pgm_name FROM programme order by pgm_name";
-          $pgms = mysqli_query($dbc, $query);?>
+{
+        $query = "SELECT pgm_id,pgm_name FROM programme order by pgm_name";
+        $pgms = mysqli_query($dbc, $query);?>
         <div class="filterform">
+        <?php require_once('navmenu.php'); ?>
         <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form">
         <table align=center>  
         <tr>
@@ -30,8 +43,7 @@ if (isset($_SESSION['username']))
                     <?php } ?>
                 </select>
             </td>
-        </tr>
-
+        </tr>   
         <tr>
             <th><label for="yearofadmn">Year of Admission</label></th>
             <th>:</th>
@@ -69,31 +81,21 @@ if (isset($_SESSION['username']))
                 <input type="radio" name="sem" value="6" <?php if (isset($_POST['sem']) && $_POST['sem'] == '6') echo 'checked'; ?>>6
             </label>
         </td></tr>
-        <tr> 
-            <th colspan="3"> <button type="submit" value="Log In" name="submit">SEARCH</button><br/></th>
-        </tr>
-    
-
-
+                </table>
+            <br> <button  class="upload-button1" type="submit" value="Log In" name="submit">SEARCH</button><br/>
     <?php
         $yearofadmn = $_POST['yearofadmn'];
-
-
-}   ?>
-  
-    <?php require_once('navmenu.php'); 
+}  
         if (isset($_POST['submit']))
-        {
-            
+        {?>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <?php
               $pgm_id = mysqli_real_escape_string($dbc, trim($_POST['programme']));
               $semester = $_POST['sem'];
               $yearofadmn = mysqli_real_escape_string($dbc, trim($_POST['yearofadmn']));
-            
-             
-                $year = 2019;
-                $year2 = 2020;
-                $credit = 0;
-            
+              $year = 2019;
+              $year2 = 2020;
+              $credit = 0;
                 $query2 = "SELECT course_id FROM pgm_course WHERE pgm_id = " . $pgm_id;
                 $course_ids = mysqli_query($dbc, $query2);
                 echo '<table align="center">';
@@ -118,22 +120,29 @@ if (isset($_SESSION['username']))
                 <?php 
                 endforeach;  ?>
                 <br>
-                    <tr>
-                        <th colspan="3"><button type="submit" value="Log In" name="submit">SEARCH</button><br /></th>
-                    </tr>
+            </table>
+                <br><button class="upload-button1" type="submit" value="Log In" name="submit">VIEW</button><br />    
                 <?php
+                $Aplus = 0;
+                $A = 0;
+                $B = 0;
+                $C = 0;
+                $D = 0;
+                $E = 0;
+                $fail = 0;
                 if (isset($_POST['submit']))
                 {
-     
                     if (isset($_POST['course_title'])) 
                     {   
                         $selectedCourseTitle = $_POST['course_title'];
                         $year = 2019;
                         $year2 = 2020;
                         $credit = 0;
-                        echo '<h3 align=center>Analysis</h3>';
-                        echo '<table align="center" border="solid">';
+                        $si_no = 1;
+                        echo '<h3 align="center">' . $selectedCourseTitle . ' -Analysis</h3>';
+                        echo '<table align="center" style="width:50%;" class="custom-table" border="solid">';
                         echo '<tr>
+                                <th>Sl No.</th>
                                 <th>Register No.</th>
                                 <th>Name</th>
                                 <th>CE</th>
@@ -159,21 +168,21 @@ if (isset($_SESSION['username']))
                         $p="P";
                         $f="F"; 
                         $i=0; 
+                        $markArray = [];
                         foreach ($studs as $a) 
                         {
                             $name = $a['name'];
                             $uty = $a['uty_reg_no'];
                             $stud_id =$a['stud_id'];?>
-                        
                             <?php
                             $query3 = "SELECT ce,ese FROM sem_exam WHERE stud_id = " . $stud_id . " AND course_id = " . $course_id2;
                             $marks = mysqli_query($dbc, $query3);
                             $ce_values = [];
                             while ($row = mysqli_fetch_assoc($marks)) 
                             {
-                                echo '<tr><td>' .$uty.'</td>';
-                                echo '<td>' .$name.'</td>';
-
+                                echo '<tr><td>' . $si_no . '</td>';
+                                echo '<td>' .$uty.'</td>';
+                                echo '<td style="text-align: left;">' .$name.'</td>';
                                 $ce = $row['ce'];
                                 $ce_values[] = $ce;
                                 $ese = $row['ese'];
@@ -186,22 +195,27 @@ if (isset($_SESSION['username']))
                                 if($GP >= 9.00)
                                 {
                                     echo "<td> A+ </td>";
+                                    $Aplus++;
                                 }
                                 else if($GP >= 8.00 && $GP <= 8.99)
                                 {
                                     echo "<td> A </td>";
+                                    $A++;
                                 }
                                 else if($GP >= 7.00 && $GP <= 7.99)
                                 {
                                     echo "<td> B </td>";
+                                    $B++;
                                 }
                                 else if($GP >= 6.00 && $GP <= 6.99)
                                 {
                                     echo "<td> C </td>";
+                                    $C++;
                                 }
                                 else if($GP >= 5.00 && $GP <= 5.99)
                                 {
                                     echo "<td> D</td>";
+                                    $D++;
                                 }
                                 else
                                 {
@@ -210,10 +224,12 @@ if (isset($_SESSION['username']))
                                         if(($ese >= 16) && ($ce + $ese >=20))
                                         {   
                                             echo "<td> E </td>";
+                                            $E++;
                                         }
                                         else
                                         {
                                             echo "<td> - </td>";
+                                            $fail++;
                                         }
                                     }
                                     if($total_external == 20)
@@ -221,22 +237,62 @@ if (isset($_SESSION['username']))
                                         if(($ese >= 8) && ($ce + $ese >=10))
                                         {   
                                             echo "<td> E </td>";
+                                            $E++;
                                         }
                                         else
                                         {
                                             echo "<td> - </td>";
+                                            $fail++;
                                         }
                                     }
                                 }
                                 
                             }
                         echo '</tr>';
-
+                        $si_no= $si_no+1;
                         }
-                    }  
-                }
+                       echo "</table>";
+                       echo '<br><br>';
+                        $data = [
+                            'A+' => $Aplus,
+                            'A' => $A,
+                            'B' => $B,
+                            'C' => $C,
+                            'D' => $D,
+                            'E' => $E,
+                            'Fail' => $fail
+                        ];
+                    
+                        // Prepare the data for the pie chart
+                        $labels = array_keys($data);
+                        $values = array_values($data);?>
+                        <div id="filterform2" align=center>
+                            <canvas id="gradePieChart" ></canvas>
+                        </div>
+                    <?php } 
+                     }       
         }
-    ?>
-   
-        </form>
-        </div>
+   ?>
+    </form>
+    </div>
+<script>
+           
+    var ctx = document.getElementById('gradePieChart').getContext('2d');
+    var data = <?php echo json_encode($values); ?>;
+    var labels = <?php echo json_encode($labels); ?>;
+    var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8E44AD'];
+    var config = {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+            }],
+        },
+    };
+
+    var gradePieChart = new Chart(ctx, config);
+</script>
+  
+       

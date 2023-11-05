@@ -1,8 +1,10 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
 </style>
+
+<link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css” />
 <?php
 require_once('appvars.php');
 require_once('connectvars.php');
@@ -79,7 +81,7 @@ if (isset($_SESSION['username']))
         <input type="hidden" name="semester" value="<?php echo $semester; ?>">
         <input type="hidden" name="roll_no" value="<?php echo $roll_no; ?>">
         <input type="hidden" name="year_of_admn" value="<?php echo $year_of_admn; ?>">
-        <table align=center>
+        <table align=center >
             <tr>
                 <td class=leftalign><b>Name</b></td><td>:</td>
                 <td class=leftalign><?php echo $name ; ?></td>
@@ -97,11 +99,15 @@ if (isset($_SESSION['username']))
                 <td class=leftalign><?php echo $semester; ?></td>
             </tr>
         </table>
-
+        <br>
+<body>
+<script src=”https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js”></script>
         <?php
         if (isset($_SESSION['username']) && $_SESSION['role_id'] == 2) {
         ?>
-            <table align="center">
+            
+            <table style="width:50%;" class="custom-table" align="center" >
+                
                 <tr>
                     <th>Sl.no</th>
                     <th>Programmes</th>
@@ -200,8 +206,8 @@ if (isset($_SESSION['username']))
             <button class="upload-button1" type="submit" value="Submit" name="submit" >SUBMIT</button>
             
         </div>
-        
-        <script>
+</body> 
+<script>
 
 var inputs = document.querySelectorAll('.nav-input');
 var columns = 3;

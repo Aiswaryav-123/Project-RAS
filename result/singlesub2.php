@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
  error_reporting(E_ALL);
  ini_set('display_errors', 1);
@@ -30,7 +30,7 @@ if (isset($_SESSION['username']))
  <div class="filterform">
     <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <input type="hidden" name="pid" id="pid" value="<?php echo $_GET['pgm_id']; ?>">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <?php require_once('navmenu.php'); 
      $year = 2019;
      $year2 = 2020;
@@ -59,7 +59,7 @@ if (isset($_SESSION['username']))
    
     <?php endforeach; ?>
     </table>  
-    <br><button type="submit" value="Log In" name="submit">SEARCH</button><br/>
+    <br><button type="submit" value="Log In" name="submit" class="upload-button1">SEARCH</button><br/>
     </form><?php
         if (isset($_POST['submit']))
         {

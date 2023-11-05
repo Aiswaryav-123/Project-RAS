@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -14,14 +14,14 @@
     if (isset($_SESSION['username']))
     {
 ?>
-    <div class="login-page" align=center>
-    <div class="form" align=center">
-        <b>Teacher Added Successfully</b>
-        <br />
-        <br />
-       
-        <h3><?php echo $name; ?></h3>
-        <p><a href="addteacher.php">Add More Teachers</a></p>
+    <center><?php require_once('navmenu.php'); ?>
+        <br><br><br>
+        <img src="/result/images/tick2.jpeg" style="width: 5%; padding-top: 5px;">    
+            <br /><br/><b><h2>Teacher Added Successfully<h2></b>
+           
+    </center>
+        
+        <p><a href="addteacher.php" class="upload-button1">Add More Teachers</a></p>
     </div>
     </div>
 <?php

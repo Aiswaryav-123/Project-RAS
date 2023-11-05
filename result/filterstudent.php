@@ -1,3 +1,8 @@
+<style>
+    body{
+     background: #EAF4FC;
+    }
+</style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -50,7 +55,7 @@
         }
     }
 ?>
-    <br />
+   
     <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form">
       <input name="programme"  type="hidden" value=<?php echo $pgmid; ?> />
       <input name="yearofadmn" type="hidden" value=<?php echo $yearofadmn; ?> />
@@ -59,15 +64,17 @@
     <div class="filterform">
     <?php require_once('navmenu.php'); ?>
     <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form">
-        <label for="dob">Programme:</label>
-         <select name="programme" id="programme">
+    <table align=center>    
+    <tr>
+    <th><label for="dob">Programme:</label></th>
+    <td> <select name="programme" id="programme">
             <?php foreach($pgms as $pgm)
             {?>
                 <option value="<?php echo $pgm['pgm_id'];?>" <?php if(!empty($pgmid)) if($pgmid == $pgm['pgm_id']) echo "selected"; ?>><?php echo $pgm['pgm_name']; ?></option>
             <?php }?>
-        </select>&nbsp;&nbsp;&nbsp;&nbsp;
-        <label for="yearofadmn">Year of Admission:</label>
-            <select name="yearofadmn" id="yearofadm">
+        </select></td></tr>
+        <tr><th><label for="yearofadmn">Year of Admission:</label></th>
+        <td> <select name="yearofadmn" id="yearofadm">
             <?php
                 if(empty($yearofadmn))
                 {
@@ -81,9 +88,11 @@
                     <option value="<?php echo  $i; ?>" <?php if ($i==$yearofadmn) echo "selected"; ?>><?php echo $i; ?></option>
             <?php   endfor;
                 } ?>
-            </select>&nbsp;&nbsp;&nbsp;&nbsp;
-            Sort By:
-            <select name="sort" onchange="javascript:this.form.submit()">
+            </select></td>
+              </tr>
+       <tr>     
+        <th>Sort By:</th>
+        <td><select name="sort" onchange="javascript:this.form.submit()">
               <option value=1 <?php if(!empty($sort)) if($sort==1) echo "selected"; ?>>Admission No.</option>
               <option value=2 <?php if(!empty($sort)) if($sort==2) echo "selected"; ?>>Roll No.</option>
               <option value=3 <?php if(!empty($sort)) if($sort==3) echo "selected"; ?>>University Reg. No.</option>
@@ -91,17 +100,24 @@
               <option value=5 <?php if(!empty($sort)) if($sort==5) echo "selected"; ?>>Gender</option>
               <option value=6 <?php if(!empty($sort)) if($sort==6) echo "selected"; ?>>Language</option>
               <option value=7 <?php if(!empty($sort)) if($sort==7) echo "selected"; ?>>Quota</option>
-            </select>
-            <input type="submit" value="Search" name="submit" class/>&nbsp;&nbsp;&nbsp;&nbsp;
-            Exclude TC/Removed <input type=checkbox name="tc" checked <?php if(!empty($tc)) if($tc=="on") echo "checked"; ?> />
-    </form>
+            </select></td>
+        </tr>
+        
+        <!--<tr><th><input type="submit" value="Search" name="submit" class/></th>-->
+        <tr><th>Exclude TC/Removed </th>
+        <td><input type=checkbox name="tc" checked <?php if(!empty($tc)) if($tc=="on") echo "checked"; ?> /></td>
+        </tr> 
+       
+        </table>  <br>
+        <button class="upload-button1" type="submit" value="Log In" name="submit">SEARCH</button><br/>
+          </form>
     </div>
     <?php
         if (isset($_POST['submit']))
         {
             echo '<div class="filterform">';
             echo '<h3 align=center>Search Results</h3>';
-            echo '<table align=center id="studentstable" width=80%>';
+            echo '<table align=center id="studentstable" style="width:100%;" class="custom-table">';
             echo '<tr><th class=sl>Sl No.</th><th style="width:50px">Adm. No.</th><th style="width:50px">Roll No.</th>
             <th style="width:100px">Uty Reg. No.</th><th style="width:250px">Name</th><th>Contact</th><th>Gender</th><th>DOB</th><th>Quota</th>
             <th style="width:100px">Date of Adm.</th><th>Language</th><th>Status</th><th>Action</th></tr>';
@@ -120,20 +136,18 @@
                 echo '<td>'. date('d.m.Y',strtotime($row['date_of_admission'])).'</td>';
                 echo '<td>'. $row['common_course_type_dec'].'</td>';
                 echo '<td>'. $row['status'].'</td>';
-                echo '<td><a href="editstudent.php?id=' . $row['stud_id'] . '">View/Edit</a>';
+                echo '<td><a href="editstudent.php?id=' . $row['stud_id'] . '">View</a>';
                 echo '</td></tr>';
                 $i++;
             }
             echo '</table>';
-            echo '<button id="download-button" name="download-button">Download CSV File</button>';
+           
             echo '</div>';
 
         }
     ?>
 
-<?php
-    require_once('footer.php');
-?>
+
 <script>
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;

@@ -1,8 +1,8 @@
 <style>
     body{
-    background:  #b9d0fa
-  }
-  </style>
+     background: #EAF4FC;
+    }
+</style>
 <?php 
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -58,10 +58,10 @@
     }
 ?>
     <br />
- 
-    <div class="filterform">
-    <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <?php require_once('navmenu.php'); ?>
+   
+    <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+   
       
             <table align=center>
             <tr>
@@ -107,39 +107,35 @@
                     </label>
                         </td> 
             </table>
+            <br>
             <?php $semester = $_POST['sem'];
             ?>
-            <button type="submit" value="Log In" name="submit">SEARCH</button><br/>
+            <button type="submit" value="Log In" name="submit" class="upload-button1">SEARCH</button><br/>
             <input type="hidden" name="pid" id="pid" value="<?php echo $_GET['pgm_id']; ?>">
            <!-- <input type="submit" value="Search" name="submit" class/>&nbsp;&nbsp;&nbsp;&nbsp;-->
             
     </form>
             
     <?php
-
         if (isset($_POST['submit']))
         {
             
-            echo '<h3 align=center>Result Uplaod</h3>';
-            echo '<table align=center id="studentstable" width=80%>';
+            echo '<h3 align=center>Result Upload</h3>';
+            echo '<table align=center style="width:50%;" class="custom-table" id="studentstable" width=80% >';
             echo '<tr><th class=sl>Sl No.</th>
             <th style="width:100px">Uty Reg. No.</th><th style="width:250px">Name</th>
             <th>Action</th></tr>';
-            
             $i = 1;
             while ($row = mysqli_fetch_array($studs))
             {
-               
                 echo '<tr><td class=sl>'.$i.'</td>';
                 echo '<td>' . $row['uty_reg_no'] . '</td>';
-                echo '<td class=center>'. ucwords(strtolower($row['name'])).'</td>';
-                echo '<td><a href="resultupload.php?stud_id='.$row['stud_id'].'&pgm_id='.$pid.'&sem='.$semester.'&roll_no='.$row['roll_no'].'&year_of_admn='.$yearofadmn.'">Upload</a>';
+                echo '<td style="text-align: left;">' . ucwords(strtolower($row['name'])) . '</td>';
 
+                echo '<td class=center><a href="resultupload.php?stud_id='.$row['stud_id'].'&pgm_id='.$pid.'&sem='.$semester.'&roll_no='.$row['roll_no'].'&year_of_admn='.$yearofadmn.'" class="upload">Upload</a>';
                 echo '</td></tr>';
                 $i++;
             }
-            
-
         }
     ?>
 </div>

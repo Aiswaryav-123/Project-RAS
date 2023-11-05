@@ -12,7 +12,7 @@
 <body bgcolor="#03A9F4">
 
 <?php
-  echo '<h3 class="no-print" align=center style="color:#333333">NASC - ' . $page_title . '</h3>';
+  echo '<h2 class="no-print" align=center style="color:#0E3657">NASC - ' . $page_title . '</h2>';
 ?>
 </body>
 </html>

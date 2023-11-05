@@ -1,8 +1,10 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  
 <?php
 require_once('appvars.php');
 require_once('connectvars.php');
@@ -43,4 +45,25 @@ if (isset($_SESSION['username']))
         </table>  
         <button type="submit" value="Log In" name="submit">SEARCH</button><br/>
           </form>
+          <button id="download-pdf-button">Download PDF</button>
+
     </div>
+<script>
+  // Function to convert the table to PDF
+  function downloadPDF() {
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+
+    // Capture the HTML table element
+    const table = document.getElementById("studentstable");
+
+    // Convert the HTML table to a data URL
+    doc.autoTable({ html: table });
+
+    // Save the PDF as "college_top_10_results.pdf"
+    doc.save("college_top_10_results.pdf");
+  }
+
+  // Add a click event listener to the download button
+  document.getElementById("download-pdf-button").addEventListener("click", downloadPDF);
+</script>

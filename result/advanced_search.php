@@ -1,11 +1,53 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
 </style>
 <?php
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+function Grade($GP,$total_external,$ese,$ce) {
+    $grade = ''; 
+
+    if ($GP >= 9.00) {
+        $grade = "A+";
+    } else if ($GP >= 8.00 && $GP <= 8.99) {
+        $grade = "A";
+    } else if ($GP >= 7.00 && $GP <= 7.99) {
+        $grade = "B";
+    } else if ($GP >= 6.00 && $GP <= 6.99) {
+        $grade = "C";
+    } else if ($GP >= 5.00 && $GP <= 5.99) {
+        if ($total_external == 40) {
+            if (($ese >= 16) && ($ce + $ese >= 20)) {
+                $grade = "D";
+            } else {
+                $grade = '<span style="color: red;"><b>F<b></span>';
+            }
+        } elseif ($total_external == 20) {
+            if (($ese >= 8) && ($ce + $ese >= 10)) {
+                $grade = "D";
+            } else {
+                $grade = '<span style="color: red;"><b>F<b></span>';
+            }
+        }
+    } else {
+        if ($total_external == 40) {
+            if (($ese >= 16) && ($ce + $ese >= 20)) {
+                $grade = "E";
+            } else {
+                $grade = '<span style="color: red;"><b>F<b></span>';
+            }
+        } elseif ($total_external == 20) {
+            if (($ese >= 8) && ($ce + $ese >= 10)) {
+                $grade = "E";
+            } else {
+                $grade = '<span style="color: red;"><b>F<b></span>';
+            }
+        }
+    }
+    return $grade;
+}
+?>
+<?php
     require_once('appvars.php');
     require_once('connectvars.php');
     session_start();
@@ -165,13 +207,17 @@
 ?>
 
 <br />
-    <div class="filterform">
-    <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form">
-      <?php require_once('navmenu.php'); ?>
-      <table align=center>
-        <tr class=centeraling>
-            <th class=center colspan=2 >Semester:</th>
-            <td class=leftalign colspan=2>
+<form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form" id="search-form">
+<!-- Your existing form content -->
+<!--    
+    <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login-form" > -->
+     
+    <?php require_once('navmenu.php'); ?>
+      <br><br>
+      <table align=center >
+        <tr class=centeralign>
+            <th class=center >Semester </th><th>:</th><td >
+            
                 <label style="display: inline-block; margin-right: 10px;">
                     <input type="checkbox" name="sem[]" value="1" <?php if (in_array('1', $selected_semesters)) echo 'checked'; ?> style="width: 20px; height: 20px;"> 1
                 </label>
@@ -193,27 +239,27 @@
             </td>
         </tr>
         <tr>
-            <td class=leftalign>
-                Name: <input type="text" id="name" name="name" value="<?php if (!empty($name)) echo $name; ?>" />
-            </td>
-            <td class=leftalign>
-                Admission No: <input type="text" id="admno" name="admno" value="<?php if (!empty($admno)) echo $admno; ?>" />
-            </td>
-            <td class=leftalign>
-                <br>University Reg No: <input type="text" id="regno" name="regno" value="<?php if (!empty($regno)) echo $regno; ?>" /><br />
-            </td>
-        </tr>
+            <th class=center>
+                Name</th><th>:</th><td><input type="text" id="name" name="name" value="<?php if (!empty($name)) echo $name; ?>" />
+            </td></tr><tr>
+            <th class=center>
+                Admission No</th><th>:</th><td><input type="text" id="admno" name="admno" value="<?php if (!empty($admno)) echo $admno; ?>" />
+                </td></tr><tr>
+            <th class=center>
+                University Reg No </th><th>:</th><td> <input type="text" id="regno" name="regno" value="<?php if (!empty($regno)) echo $regno; ?>" /><br />
+                </td></tr>
+        
         <tr align="center">
-            <td class=leftalign>
-                Status(Pass/Fail):
+            <th class=center>
+                Status(Pass/Fail)</th><th>:</th><td>
                 <select name="status">
                     <option value="0"  <?php if($status == "0") echo "selected"; ?>>All</option>
                     <option value="P"  <?php if($status == "P") echo "selected"; ?>>Pass</option>
                     <option value="F"  <?php if($status == "F") echo "selected"; ?>>Fail</option>
                 </select>
-            </td>
-            <td class=leftalign>
-            Programme:
+                </td></tr><tr>
+            <th class=center>
+            Programme</th><th>:</th><td>
             <select name="programme">
                 <option value=0 <?php if(!empty($pgmid)) if($pgmid == 0) echo "selected"; ?>>All</option>
                 <?php foreach($pgms as $pgm)
@@ -221,9 +267,9 @@
                     <option value="<?php echo $pgm['pgm_id'];?>" <?php if(!empty($pgmid)) if($pgmid == $pgm['pgm_id']) echo "selected"; ?>><?php echo $pgm['pgm_name']; ?></option>
                 <?php }?>
             </select>
-            </td>
-            <td class=leftalign>
-                Year of Admission:
+            </td></tr><tr>
+            <th class=center>
+                Year of Admission</th><th>:</th><td>
                 <select name="yearofadmn">
                 <option value="<?php echo  0; ?>" <?php if ($yearofadmn==0) echo "selected"; ?>><?php echo 'All'; ?></option>
                 <?php
@@ -231,19 +277,18 @@
                         <option value="<?php echo  $i; ?>" <?php if ($i==$yearofadmn) echo "selected"; ?>><?php echo $i; ?></option>
                 <?php   endfor; ?>
                 </select>
-            </td>
-            <td class=leftalign>
-                Sex:<br>
+                </td></tr><tr>
+            <th class=center>
+                Sex</th><th>:</th><td>
                 <select name="sex">
                     <option value="0"  <?php if($sex == "0") echo "selected"; ?>>All</option>
                     <option value="M"  <?php if($sex == "M") echo "selected"; ?>>Male</option>
                     <option value="F"  <?php if($sex == "F") echo "selected"; ?>>Female</option>
                 </select>
-            </td>
-        </tr>
+                </td></tr><tr>
         <tr align="center">
-            <td class=leftalign>
-                Quota:
+            <th class=center>
+                Quota</th><th>:</th><td>
                 <select name="quota">
                 <option value=0 <?php if($quotaid == 0) echo "selected"; ?>>All</option>
                     <?php foreach($quotas as $quota)
@@ -251,9 +296,9 @@
                         <option value="<?php echo $quota['quota_id'];?>" <?php  if($quotaid == $quota['quota_id']) echo "selected"; ?>><?php echo $quota['quota_name']; ?></option>
                     <?php }?>
                 </select>
-            </td>
-            <td class=leftalign>
-                Category:
+                </td></tr><tr>
+            <th class=center>
+                Category</th><th>:</th><td>
                 <select name="category">
                     <option value=0 <?php if($categoryid == 0) echo "selected"; ?>>All</option>
                     <?php foreach($cats as $cat)
@@ -261,27 +306,42 @@
                         <option value="<?php echo $cat['cat_id'];?>" <?php  if($categoryid == $cat['cat_id']) echo "selected"; ?>><?php echo $cat['cat_name']; ?></option>
                     <?php }?>
                 </select>
-            </td>
-        </tr>
-        </table>
-        <br />
-        <br />
-            <div align=center>
-                <button class="upload-button1" type="submit" value="Submit" name="submit" >SEARCH</button>
-            </div>
+             </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="upload-button1" type="submit" value="Submit" name="submit" >SEARCH</button>
+                </td>
+                <td>
+                    <button class="upload-button1" type="reset" value="reset" name="reset">RESET</button>
+                </td>
+            </tr> 
+        </table>  
         </form>
         </div>
     <?php
-        if (isset($_POST['submit']))
-        {
+    if (isset($_POST['submit']) ) {
+       if(isset($_POST['sem']) && !empty($_POST['sem'])){
+            $si_no = 1;
             foreach($studs as $a)
             {
                 $name = $a['name'];
                 $reg_no = $a['uty_reg_no'];
             }
             echo '<div class="filterform">';
-            echo '<h3 align="center"> Search Results</h3>';
-            echo '<table align=center id=csv>';
+            ?>
+            <center>
+                <table>
+                    <tr>    
+                    <th style="font-size:20;width:500px;"><b>Search Results<b></th>
+                    <td>
+                        <button class="hide" style="width:70px;align:right;" value="reset" name="reset" onclick="history.back()" >Hide</button>
+                    </td>    
+                    </tr>
+                </table>
+            <center>
+            <?php
+            echo '<table align="center" style="width:50%;" class="custom-table" id="result-table" >';
                 $i=0;
                 $unique_course_titles = [];
                 foreach ($studs as $a) 
@@ -298,15 +358,20 @@
                             $stud_id2 = $a['stud_id'];
                             if($stud_id==$stud_id2)
                             {
+                                
                                 echo '
-                                <tr class=centeralign colspan="2">
-                                    <th>'. $name  . '  -  ' .  $reg_no .'</th>
+                                <tr class=centeralign>
+                                    <th  colspan="4">'. $name  . '  -  ' .  $reg_no .'</th>
                                 </tr>
                                 <tr>
+                                    <th>SI.No</th>
                                     <th>Course_title</th>
                                     <th>Mark</th>
+                                    <th>Grade</th>
                                 </tr>';
+                              
                                 break;
+                               
                             }
                         }
                     }
@@ -331,16 +396,20 @@
                             $ese = $row['ese'];
                             $ce = $row['ce'];
                             $mark = $ese + $ce;
+                            $GP = ($mark/($total_external+$total_internal))*10;
                             if($status=="0")
                             {
                                 if(($previous!=$course_title) && (!in_array($course_title, $unique_course_titles)))
                                 {
                                     echo '<tr>';
-                                        echo '<td>' . $course_title . '</td>';
+                                        echo '<td>' . $si_no . '</td>';
+                                        echo '<td style="text-align: left;">'. $course_title . '</td>';
                                         echo '<td>' . $mark . '</td>';
+                                        echo '<td>' .Grade($GP,$total_external,$ese,$ce).'</td>';
                                     echo '</tr>';
                                     $previous = $course_title;
                                     $unique_course_titles[] = $course_title;
+                                    $si_no= $si_no+1;
                                 }
                             }
                             else if($status=="P")
@@ -414,12 +483,15 @@
                                 if($stud_id==$stud_id2)
                                 {
                                     echo '
-                                    <tr class=centeralign colspan="2">
-                                        <th>'. $name  . '  -  ' .  $reg_no .'</th>
+                                    <tr rowspan="2"></tr>
+                                    <tr class=centeralign colspan="4">
+                                        <th colspan="4">'. $name  . '  -  ' .  $reg_no .'</th>
                                     </tr>
                                     <tr>
+                                        <th>SI.No</th>
                                         <th>Course_title</th>
                                         <th>Mark</th>
+                                        <th>Grade</th>
                                     </tr>';
                                     break;
                                 }
@@ -441,15 +513,19 @@
                                     $ese = $row['ese'];
                                     $ce = $row['ce'];
                                     $mark = $ese + $ce;
-                                    
+                                    $GP = ($mark/($total_external+$total_internal))*10;
                                     if(($previous!=$course_title) && (!in_array($course_title, $unique_course_titles)))
                                     {
                                         echo '<tr>';
-                                            echo '<td>' . $course_title . '</td>';
+                                        
+                                            echo '<td>' . $si_no . '</td>';
+                                            echo '<td style="text-align: left;">'. $course_title . '</td>';
                                             echo '<td>' . $mark . '</td>';
-                                        echo '</tr>';
+                                            echo '<td>' .Grade($GP,$total_external,$ese,$ce).'</td>';
+                                            echo '</tr>';
                                         $previous = $course_title;
                                         $unique_course_titles[] = $course_title;
+                                        $si_no= $si_no+1;
                                     }
                                 }
                             }
@@ -473,12 +549,14 @@
                                 if($stud_id==$stud_id2)
                                 {
                                     echo '
-                                    <tr class=centeralign colspan="2">
-                                        <th>'. $name  . '  -  ' .  $reg_no .'</th>
+                                    <tr class=centeralign colspan="4">
+                                        <th colspan="4">'. $name  . '  -  ' .  $reg_no .'</th>
                                     </tr>
                                     <tr>
+                                        <th>SI.No</th>
                                         <th>Course_title</th>
                                         <th>Mark</th>
+                                        <th>Grade</th>
                                     </tr>';
                                    break;
                                 }
@@ -501,20 +579,24 @@
                                     $ese = $row['ese'];
                                     $ce = $row['ce'];
                                     $mark = $ese + $ce;
-                                    
+                                    $GP = ($mark/($total_external+$total_internal))*10;
                                     if(($previous!=$course_title) && (!in_array($course_title, $unique_course_titles)))
                                     {
                                         echo '<tr>';
-                                            echo '<td>' . $course_title . '</td>';
+                                            echo '<td>' . $si_no . '</td>';
+                                            echo '<td style="text-align: left;">'. $course_title . '</td>';
                                             echo '<td>' . $mark . '</td>';
+                                            echo '<td>' .Grade($GP,$total_external,$ese,$ce).'</td>';
                                         echo '</tr>';
                                         $previous = $course_title;
                                         $unique_course_titles[] = $course_title;
+                                        $si_no= $si_no+1;
                                     }
                                 }
                             }
                             $unique_course_titles = [];
                         }
+                        echo '<tr><td></td></tr>';
                     }
                     else
                     {
@@ -522,21 +604,20 @@
                     }
                 }
                 echo '</table>';
+        } else {
+            
+            echo '<div align="center" style="color:red;">Please select at least one semester before searching.</div>';
         }
-    ?>
-    <script>
-
-function htmlToCSV(html, filename) {
-    var data = [];
-    var rows = document.querySelectorAll("table tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-
-        for (var j = 0; j < cols.length-1; j++) {
-                row.push(cols[j].innerText);
-        }
-
-        data.push(row.join(","));
     }
+    ?>
+<script>
+function resetFormAndShowTable() {
+    history.back();
 }
+
+function displayResultsTable() {
+    // Show the results container
+    var resultsContainer = document.getElementById('results-container');
+    resultsContainer.style.display = 'block';
+}
+</script>

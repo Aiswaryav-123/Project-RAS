@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -10,6 +10,7 @@
     $page_title = 'Teacher Entry';
     require_once('header.php');
     require_once('navmenu.php');  // Connect to the database
+    
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (isset($_SESSION['username']))
     {
@@ -27,6 +28,13 @@
             {
                 $teacher_id = $a['max_teacher_id']; 
             }
+            $query = "SELECT MAX(user_id) AS max_user_id FROM staff_login";
+            $user_ids = mysqli_query($dbc, $query);
+            foreach($user_ids as $a)
+            {
+                $user_id = $a['max_user_id']; 
+            }
+            $user_id = $user_id+1;
             $teacher_id = $teacher_id+1;
             $deptid = mysqli_real_escape_string($dbc, trim($_POST['department']));
             $email = mysqli_real_escape_string($dbc, trim($_POST['email']));
@@ -39,16 +47,16 @@
                 $role_id = 2;
                 $pwd_sl_no =0;
                $query = "INSERT INTO teacher(name, designation_id, dept_id, email,sex, teacher_id) 
-                         VALUES(" . (empty($name) ? "NULL" : "'" . $name . "'") . ","
+                         VALUES("   . (empty($name) ? "NULL" : "'" . $name . "'") . ","
                                     . (empty($designid) ? "NULL" : $designid) . ","
                                     . (empty($deptid) ? "NULL" : $deptid) . ","
                                     . (empty($email) ? "NULL" : "'" . $email . "'") . ","
                                     . (empty($sex) ? "NULL" : "'" . $sex . "'") . ","
-                                    . (empty($teacher_ids) ? "NULL" : "'" . $teacher_id . "'") . ")";
-                $user_id = $teacher_id;
-                $query1 = "INSERT INTO staff_login (user_id,username, pwd, role_id, teacher_id, pwd_sl_no)
-                           VALUES (". (empty($teacher_ids) ? "NULL" : "'" . $teacher_id . "'") . ","
-                                    . (empty($name) ? "NULL" : "'" . strtoupper($name) . "'") . ","
+                                    . (empty($teacher_id) ? "NULL" : "'" . $teacher_id . "'") . ")";
+               
+                $query1 = "INSERT INTO staff_login (username,user_id, pwd, role_id, teacher_id, pwd_sl_no)
+                           VALUES (". (empty($name) ? "NULL" : "'" . $name . "'") . ","
+                                    . (empty($user_id) ? "NULL" : "'" .$user_id. "'").","
                                     . (empty($pwd) ? "NULL" : "'" . sha1($pwd) . "'") . ","
                                     . $role_id . ","
                                     . (empty($teacher_id) ? "NULL" : "'" . $teacher_id . "'") . ","
@@ -66,11 +74,11 @@
         }
     }
 ?>
-<div class="cont">
-<div class="filterform-section" align="left">
+
 <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <fieldset>
-            <legend><b>Admission/Examination Related Information</b></legend>
+    <center>
+        <fieldset style="width:50%;background-color:white" >
+            <legend><b>Teacher Details</b></legend>
             <table align="center">
             <tr >
             <th>Name</th>
@@ -106,5 +114,7 @@
             </select></td></tr>
             <tr><th><label for="email" style="width:auto">Email</label></th><th>:</th>
             <td><input type="email" id="email" name="email" value="<?php if (!empty($email)) echo $email; ?>" /></td></tr>
-            <tr><td colspan="3"><button type="submit" value="Submit" name="submit">SUBMIT</button><td></tr>
-        </div>
+            <tr><td colspan="3"><button type="submit" value="Submit" name="submit" class="upload-button1">SUBMIT</button><td></tr>
+     
+    <center>
+            </form>

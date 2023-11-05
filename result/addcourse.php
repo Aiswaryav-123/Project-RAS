@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
 require_once('appvars.php');
 require_once('connectvars.php');
@@ -23,7 +23,14 @@ if (isset($_SESSION['username'])) {
     $query = "SELECT pgm_id,pgm_name FROM programme order by pgm_name";
     $pgms = mysqli_query($dbc, $query);
     if (isset($_POST['submit'])) {
-        $course_id = mysqli_real_escape_string($dbc, trim($_POST['course_id']));
+        //$course_id = mysqli_real_escape_string($dbc, trim($_POST['course_id']));
+        $query = "SELECT MAX(course_id) AS max_course_id FROM course";
+        $course_ids = mysqli_query($dbc, $query);
+        foreach($course_ids as $a)
+        {
+            $course_id2 = $a['max_course_id']; 
+        }
+        $course_id = $course_id2 + 1;
         $course_title = mysqli_real_escape_string($dbc, trim($_POST['course_title']));
         $course_code = mysqli_real_escape_string($dbc, trim($_POST['course_code']));
         $lab_theory = mysqli_real_escape_string($dbc, trim($_POST['lab_theory']));
@@ -70,17 +77,13 @@ if (isset($_SESSION['username'])) {
     mysqli_close($dbc);
 }
 ?>
-<div class="cont">
-<div class="filterform-section" align="left">
+
+
     <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <fieldset>
+    <center>
+        <fieldset style="width:50%;background-color:white">
             <legend><b>Course Details</b></legend>
             <table align="center">
-                <tr>
-                    <th>Course id</th>
-                    <th>:</th>
-                    <td><input type="number" id="course_id" name="course_id" value="<?php if (!empty($course_id)) echo $course_id; ?>" /></td>
-                </tr>
                 <tr>
                     <th>Course Title</th>
                     <th>:</th>
@@ -184,9 +187,9 @@ if (isset($_SESSION['username'])) {
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><button type="submit" value="Submit" name="submit">SUBMIT</button></td>
+                    <td colspan="3"><button type="submit" value="Submit" name="submit" class="upload-button">SUBMIT</button></td>
                 </tr>
             </table>
         </fieldset>
+    <center>
     </form>
-</div>

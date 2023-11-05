@@ -1,6 +1,6 @@
 <style>
-    body {
-        background: #b9d0fa;
+    body{
+     background: #EAF4FC;
     }
 </style>
 <?php
@@ -154,7 +154,7 @@
         }
     }
 ?>
-    <br />
+    <br /><br>
     
 
     <div class="cont">
@@ -321,7 +321,7 @@
                 <option value="14"<?php if(!empty($dist)) if($dist == "14") echo "selected"; ?>>Thiruvananthapuram</option>
             </select></td></tr>
             <tr><th><label for="state" style="width:auto">State</label></th>
-            <th>:</th><td>/<select name="state">
+            <th>:</th><td><select name="state">
                 <option value="1">Kerala</option>
             </select></td></tr>
        
@@ -336,7 +336,7 @@
             <option value="TC"<?php if(!empty($status)) if($status == "TC") echo "selected"; ?>>TC</option>
         </select></td></tr>
        
-        <tr><td colspan="3"><button type="submit" value="UPDATE" name="submit">SUBMIT</button><td></tr>
+        <tr><td colspan="3"><td></tr>
         
     </form>
     </div>

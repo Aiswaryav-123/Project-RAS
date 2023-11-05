@@ -1,13 +1,13 @@
 <style>
     body{
-    background:  #b9d0fa
-  }
+     background: #EAF4FC;
+    }
   </style>
 <?php 
     require_once('appvars.php');
     require_once('connectvars.php');
     session_start();
-    $page_title = 'University Exam Mark Upload';
+    $page_title = 'University Exam Mark Edit';
     require_once('header.php');
    // require_once('navmenu.php');  // Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -43,17 +43,18 @@
                              quota_name,date_of_admission,status,contact_no,cc.common_course_type_dec
                       FROM stud_master,common_course_type as cc,quota as q
                       WHERE cc.common_course_type_id = stud_master.language_id" .$remove_tc. " AND q.quota_id = stud_master.quota AND
-                            pgm_id = ". $pid . " AND year_of_admn = ". $yearofadmn . " order by ".$sortby;
+                            pgm_id = ". $pid . "  AND status='Studying' AND year_of_admn = ". $yearofadmn . " order by ".$sortby;
             }
             else
             {
             $query = "SELECT stud_id,name,uty_reg_no,roll_no,admn_no,dob,sex,roll_no,contact_no,quota_name,date_of_admission,status,NULL
                         FROM stud_master,quota as q
-                        WHERE q.quota_id = stud_master.quota ".$remove_tc. " AND
-                              pgm_id = ". $pid . " AND year_of_admn = ". $yearofadmn . " order by ".$sortby;
+                        WHERE q.quota_id = stud_master.quota ".$remove_tc. " 
+                              pgm_id = ". $pid . " AND status='Studying' AND year_of_admn = ". $yearofadmn . " order by ".$sortby;
             }
             $studs = mysqli_query($dbc, $query);
             mysqli_close($dbc);
+        
         }
     }
 ?>
@@ -109,7 +110,8 @@
             </table>
             <?php $semester = $_POST['sem'];
             ?>
-            <button type="submit" value="Log In" name="submit">SEARCH</button><br/>
+            <br>
+            <button type="submit" value="Log In" name="submit" class="upload-button1">SEARCH</button><br/>
             <input type="hidden" name="pid" id="pid" value="<?php echo $_GET['pgm_id']; ?>">
            <!-- <input type="submit" value="Search" name="submit" class/>&nbsp;&nbsp;&nbsp;&nbsp;-->
             
@@ -120,8 +122,8 @@
         if (isset($_POST['submit']))
         {
             
-            echo '<h3 align=center>Result Uplaod</h3>';
-            echo '<table align=center id="studentstable" width=80%>';
+            echo '<h3 align=center>Result Upload</h3>';
+            echo '<table align=center id="studentstable" style="width:50%;" class="custom-table">';
             echo '<tr><th class=sl>Sl No.</th>
             <th style="width:100px">Uty Reg. No.</th><th style="width:250px">Name</th>
             <th>Action</th></tr>';
@@ -132,8 +134,8 @@
                
                 echo '<tr><td class=sl>'.$i.'</td>';
                 echo '<td>' . $row['uty_reg_no'] . '</td>';
-                echo '<td class=center>'. ucwords(strtolower($row['name'])).'</td>';
-                echo '<td><a href="resultedit.php?stud_id='.$row['stud_id'].'&pgm_id='.$pid.'&sem='.$semester.'&roll_no='.$row['roll_no'].'&year_of_admn='.$yearofadmn.'">Edit</a>';
+                echo '<td style="text-align:left;">'. ucwords(strtolower($row['name'])).'</td>';
+                echo '<td><a href="resultedit.php?stud_id='.$row['stud_id'].'&pgm_id='.$pid.'&sem='.$semester.'&roll_no='.$row['roll_no'].'&year_of_admn='.$yearofadmn.'" class="upload">Edit</a>';
                 echo '</td></tr>';
                 $i++;
             }

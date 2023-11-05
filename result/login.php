@@ -12,7 +12,7 @@
     if (isset($_POST['submit'])) {
       // Connect to the database
       $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-	echo "hi";
+	
       // Grab the user-entered log-in data
       $user_username = mysqli_real_escape_string($dbc, trim($_POST['username']));
       $user_password = mysqli_real_escape_string($dbc, trim($_POST['password']));
@@ -45,62 +45,45 @@
 ?>
 
 <html>
-  
 <head>
   <title>NASC Result Analysis</title>
   <link rel="stylesheet" type="text/css" href="s.css" />
   <style>
     body{
-      background-image: url('images/bg.png');
-      background-repeat: no-repeat; /* Prevent image from repeating */
-      background-size: 300px 300px; 
-      
-  
-    /*background: linear-gradient(to bottom, #3a86ff, #8c60ff); */
-    background: linear-gradient(to bottom, #6495ED, #FFFFFF);
-  
-    /*background: linear-gradient(to right bottom,  #6495ED 50%, #FFFFFF 50%);*/
-  
   }
   </style>
-  
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
   <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />-->
 </head>
 <body>
-<h1 align=center style="color:#fffff;">NEHRU ARTS AND SCIENCE COLLEGE KANHANGAD, KASARAGOD</h1>
-      <h2 align=center style="color:#fffff;">RESULT ANALYSIS</h2>
-<?php
-  // If the session var is empty, show any error message and the log-in form; otherwise confirm the log-in
-  if (empty($_SESSION['user_id'])) {
-    echo '<p class="error" align=center>' . $error_msg . '</p>';
-?>
-  
-   <div class="form" style="height:auto">
-  <form method="post" class="login-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" >
- 
-  <div align=center>
-    <img src="/result/images/nehru.png" align="center" width=70px ><br/><br/>
-  </div>
-<div class="input-container">
-  <i class="fa fa-user" ></i>
-  <input type="text" name="username" placeholder="username" value="<?php if (!empty($user_username)) echo $user_username; ?>" /><br />
-</div>
-
-<div class="input-container">
-  <i class="fa fa-lock"></i>
-  <input type="password" name="password" placeholder="password" required=""/><br/>
-</div>
-      <!--<i class="bi bi-eye-slash" id="togglePassword"></i>-->
-      <button type="submit" value="Log In" name="submit">Login</button><br/>
-  </form>
-
+  <center><meta name="viewport" content="width=device-width, initial-scale=1">
+  <img src="/result/images/NASCLOGO2.png" align="center">
+  <h1 align=center style="color:#0E3657;">NEHRU ARTS AND SCIENCE COLLEGE KANHANGAD, KASARAGOD</h1>
+  <h1 align=center style="color:#0E3657; font-size:40px;">RESULT ANALYSIS SYSTEM</h1>
+  <?php
+    if (empty($_SESSION['user_id'])) {
+      echo '<p class="error" align=center>' . $error_msg . '</p>';
+  ?>
+  <br>
+  <div class="form" style="height: 100px; background:#b9d0fa; align:center;">
+    <form method="post" class="login-form"  width="300px" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+      <div align=center>
+      </div>
+      <div class="input-container">
+        <i style="padding-bottom:8%;" class="fa fa-user"></i>
+        <input type="text" name="username" placeholder="username"  style="height: 40px;" value="<?php if (!empty($user_username)) echo $user_username; ?>" /><br /><br/>
+      </div>
+      <div class="input-container">
+        <i style="padding-bottom:8%;" class="fa fa-lock"></i>
+        <input type="password" name="password" placeholder="password" style="height: 40px;" required=""/><br/><br>
+      </div>
+      <button class="upload-button1" type="submit" value="Log In" name="submit">Login</button><br/>
+    </form>
   </div> 
+  <center>
 <?php
   }
   else {
-    // Confirm the successful log-in
     echo('<p class="login" align=center>You are logged in as ' . $_SESSION['username'] . '.</p>');
     echo '<p align=center><a href="index.php">Go Home</a></p>';
   }

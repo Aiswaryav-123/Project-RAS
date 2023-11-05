@@ -1,6 +1,6 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
 </style>
 <?php
@@ -90,16 +90,19 @@ if (isset($_SESSION['username']))
                     </label>
                         </td> 
             </tr> 
-        </table>  
-        <button type="submit" value="Log In" name="submit">SEARCH</button><br/>
+        </table>  <br>
+        <button class="upload-button1" type="submit" value="Log In" name="submit">SEARCH</button><br/>
     </form>
     <?php
         if (isset($_POST['submit']))
         {
             
-            echo '<h3 align=center>Analysis</h3>';?>
-            <table align="center" border="solid">
+            echo '<h3 align=center>Analysis</h3>';
+            $si_no = 1;?>
+            <table align="center"  style="width:50%;" class="custom-table" id="printTable1">
+            <?php $tables[]="printTable1";?>
             <tr>
+            <th>Sl No.</th>
             <th>Register No.</th>
             <th>Name</th>
             <?php
@@ -122,7 +125,7 @@ if (isset($_SESSION['username']))
                 }
             }
             foreach ($unique_course_titles as $course_title) {
-                echo '<th>' . $course_title . '</th>';
+                echo '<th style="width: 50px;">' . $course_title . '</th>';
             }
             ?> <th>Status</th><?php
             $unique_course_titles = [];
@@ -131,8 +134,9 @@ if (isset($_SESSION['username']))
                 $uty = $a['uty_reg_no'];
                 $stud_id =$a['stud_id'];?>
                 <tr>
+                <td> <?php echo $si_no; ?> </td>
                 <td><?php echo $uty ?></td>
-                <td><?php echo $name ?></td>
+                <td style="text-align: left;"><?php echo $name ?></td>
            
            <?php
                 $i=0;
@@ -202,21 +206,24 @@ if (isset($_SESSION['username']))
                 if($i>0)
                 {
                     echo "<td style=color:red>" .$f. "</td>";
+                   
                 }
                 else
                 {
                     echo "<td>" .$p. "</td>";
                 }
-              
+                $si_no= $si_no+1;
             }  
            
            ?> 
         </tr>      
     </table>
     <br><br><br>
-     
-    <table align="center" border="solid" width="50%">
-            <tr><th>Papers</th>
+    <?php $si_no = 1;?>
+    <table align="center"  style="width:50%;" class="custom-table" id=printTable2>
+    <?php $tables[]="printTable2";?>
+            <tr><th>Sl No.</th>
+            <th>Papers</th>
             <th>A+</th>
             <th>A</th>
             <th>B</th>
@@ -324,7 +331,8 @@ if (isset($_SESSION['username']))
                 {
                     $previous_course=$course_title;
                     echo '<tr>
-                            <th>' . $course_title . '</th> 
+                            <td>' . $si_no . '</td>
+                            <td>' . $course_title . '</td> 
                             <td>' . $Aplus . '</td>
                             <td>' . $A . '</td>
                             <td>' . $B . '</td>
@@ -341,11 +349,34 @@ if (isset($_SESSION['username']))
                     $Aplus=$A=$B=$C=$D=$E=$Fail=0;
                     continue;
                 }
-            }
-
-        }    
-                ?>
-    </table>
+                $si_no= $si_no+1;
+            }?>
+          </table>
+         
+         <div align=center>
+         <br>
+         <button class="upload-button1" onclick=print()>PRINT</button>
+     </div>
+     <?php }   ?>
+      
         
-</div>
- 
+    
+   
+</div>   
+        
+<script>
+// scritp for printing
+var tables = <?php echo json_encode($tables); ?>;
+
+function print() {
+    var newWin = window.open("");
+    tables.forEach(function (tableId) {
+        var tableToPrint = document.getElementById(tableId);
+        newWin.document.write(tableToPrint.outerHTML);
+        newWin.document.write("<br><br>"); 
+    });
+    
+    newWin.print();
+    newWin.close();
+}
+</script>

@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #b9d0fa ;
+    body{
+     background: #EAF4FC;
     }
-</style>
+  </style>
 <?php
     require_once('appvars.php');
     require_once('connectvars.php');
@@ -34,11 +34,11 @@
         }
                
 ?>
+    <?php require_once('navmenu.php'); ?>
     <div class="filterform" align=center>
-        <?php require_once('navmenu.php'); ?>
-        <div class="cont">
-                <div class="b">
-                  <br /><br/></br><br /><br/></br><br /><br/><b>Mark Added Successfully</b>
+        <br><br><br>
+        <img src="/result/images/tick2.jpeg" style="width: 5%; padding-top: 5px;">    
+            <br /><br/><b><h2>Mark Added Successfully<h2></b>
             <br />
             <br />
         <?php
@@ -55,7 +55,7 @@
            $stud_id = $a['stud_id'];
         }
 
-        echo '<a href="resultupload.php?stud_id='.$stud_id.'&pgm_id='.$pgm_id.'&sem='.$semester.'&roll_no='.$roll_no.'&year_of_admn='.$year_of_admn.'" class="upload-button">Next</a>';
+        echo '<a href="resultupload.php?stud_id='.$stud_id.'&pgm_id='.$pgm_id.'&sem='.$semester.'&roll_no='.$roll_no.'&year_of_admn='.$year_of_admn.'" class="upload-button1">Next</a>';
         ?>
         </div>
     </div>
