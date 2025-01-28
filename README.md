@@ -41,9 +41,7 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 
 ### Install Apache web server (if not already installed):
 
-```markdown
 
-```bash
  sudo apt-get install apache2
 
 ### Clone the repository
