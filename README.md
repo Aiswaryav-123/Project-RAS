@@ -36,11 +36,5 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 <img src="https://img.shields.io/badge/CSS-Styling-blue?style=flat-square" alt="CSS Badge">
 
 ---
-# Installation and Setup
-
-### Code Snippet
-You can copy the following code directly:
-
-<script src="https://gist.github.com/username/gist-id.js"></script>
 
 
