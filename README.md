@@ -44,7 +44,8 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 ```markdown
 
  sudo apt-get install apache2
-```\
+
+```
 
 
 ### Clone the repository
@@ -53,4 +54,4 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 
 git clone https://github.com/your-username/your-repo.git
 
-
+```
