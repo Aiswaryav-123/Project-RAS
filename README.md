@@ -38,18 +38,15 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 ---
 # Installation and Setup
 
-### What Happens on GitHub:
-When you view this README on GitHub, **GitHub automatically adds a "Copy" button** to the top-right corner of the code block.
 
----
+### Install Apache web server (if not already installed):
 
-### **Why This Works:**
-GitHub automatically supports this functionality without requiring any additional code or setup, so it's the best option for README files hosted on GitHub.
+ sudo apt-get install apache2
 
-### **For Full Setup in README:**
+### Clone the repository**
 
 ```markdown
-### Example Command to Clone Repository:
+
 ```bash
 git clone https://github.com/your-username/your-repo.git
 
