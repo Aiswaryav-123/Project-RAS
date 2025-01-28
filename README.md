@@ -43,8 +43,6 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 
 ```markdown
 
-```bash
-
  sudo apt-get install apache2
 
 ### Clone the repository
