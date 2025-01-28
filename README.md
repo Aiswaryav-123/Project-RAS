@@ -38,5 +38,9 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 ---
 # Installation and Setup
 
+### Code Snippet
+You can copy the following code directly:
+
+<script src="https://gist.github.com/username/gist-id.js"></script>
 
 
