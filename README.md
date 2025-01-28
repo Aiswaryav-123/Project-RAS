@@ -39,7 +39,7 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 # Installation and Setup
 
 
-### Install Apache web server (if not already installed):
+### Install Apache web server (if not already installed)
 
 ```markdown
 
@@ -53,5 +53,18 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 ```markdown
 
 git clone https://github.com/your-username/your-repo.git
+
+```
+### Navigate to Apache's web root directory
+
+```markdown
+
+ cd /var/www/html/result
+
+```
+### Access the system through web browser
+```markdown
+
+ cd /var/www/html/result](http://localhost/result
 
 ```
