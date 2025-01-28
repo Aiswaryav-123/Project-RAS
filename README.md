@@ -65,6 +65,6 @@ git clone https://github.com/your-username/your-repo.git
 ### Access the system through web browser
 ```markdown
 
- cd /var/www/html/result](http://localhost/result
+ cd /var/www/html/result
 
 ```
