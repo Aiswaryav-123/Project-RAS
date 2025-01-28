@@ -28,39 +28,14 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 ---
 
 # Tools
-# Tools Used
+<img src="https://img.shields.io/badge/phpMyAdmin-MySQL_Tool-yellow?style=flat-square" alt="phpMyAdmin Badge">
+<img src="https://img.shields.io/badge/Visual_Studio_Code-Editor-blue?style=flat-square" alt="VS Code Badge">
+<img src="https://img.shields.io/badge/PHP-Server_Scripting-purple?style=flat-square" alt="PHP Badge">
+<img src="https://img.shields.io/badge/MySQL-Database-orange?style=flat-square" alt="MySQL Badge">
+<img src="https://img.shields.io/badge/Apache-Web_Server-red?style=flat-square" alt="Apache Badge">
+<img src="https://img.shields.io/badge/Git-Version_Control-black?style=flat-square" alt="Git Badge">
+<img src="https://img.shields.io/badge/GitHub-Version_Control-lightgrey?style=flat-square" alt="GitHub Badge">
+<img src="https://img.shields.io/badge/XAMPP-Web_Development-orange?style=flat-square" alt="XAMPP Badge">
 
-### 1. **phpMyAdmin**
-
-**phpMyAdmin** is a popular tool for managing MySQL databases. Below is a step-by-step guide on how to use it:
-
-1. **Login**  
-   Open the phpMyAdmin login page and enter your credentials (username & password).
-
-   ![phpMyAdmin Login](https://example.com/phpmyadmin-login.png)
-
-2. **Creating a Database**  
-   - Go to the "Databases" tab.
-   - Enter the database name and click "Create."
-
-   ![Create Database](https://example.com/phpmyadmin-create-db.png)
-
-3. **Managing Tables**  
-   - Navigate to your database.
-   - Click on "Create Table" to define columns and their types.
-   
-   ![Manage Tables](https://example.com/phpmyadmin-manage-tables.png)
-
-4. **Importing Data**  
-   - Use the "Import" tab to upload SQL files.
-   - Select the file, choose the format, and click "Go."
-
-   ![Import Data](https://example.com/phpmyadmin-import.png)
-
-5. **Exporting Data**  
-   - Use the "Export" tab to save your database as an SQL file.
-   - Choose "Quick" or "Custom" export options and click "Go."
-
-   ![Export Data](https://example.com/phpmyadmin-export.png)
 
 
