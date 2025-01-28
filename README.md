@@ -32,8 +32,9 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 <img src="https://img.shields.io/badge/Visual_Studio_Code-Editor-blue?style=flat-square" alt="VS Code Badge">
 <img src="https://img.shields.io/badge/PHP-Server_Scripting-purple?style=flat-square" alt="PHP Badge">
 <img src="https://img.shields.io/badge/MySQL-Database-orange?style=flat-square" alt="MySQL Badge">
-<img src="https://img.shields.io/badge/Apache-Web_Server-red?style=flat-square" alt="Apache Badge">
-<img src="https://img.shields.io/badge/XAMPP-Web_Development-green?style=flat-square" alt="XAMPP Badge">
+<img src="https://img.shields.io/badge/HTML-Frontend-orange?style=flat-square" alt="HTML Badge">
+<img src="https://img.shields.io/badge/CSS-Styling-blue?style=flat-square" alt="CSS Badge">
+
 
 
 
