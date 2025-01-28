@@ -35,7 +35,8 @@ The Result Analysis System is a powerful, centralized solution designed to revol
 <img src="https://img.shields.io/badge/HTML-Frontend-orange?style=flat-square" alt="HTML Badge">
 <img src="https://img.shields.io/badge/CSS-Styling-blue?style=flat-square" alt="CSS Badge">
 
-
+---
+# Installation and Setup
 
 
 
